@@ -1,0 +1,63 @@
+- type: entity
+  id: Netpod
+  parent: BaseMachinePowered
+  name: netpod
+  description: A neural interface for the Bitrunning system.
+  components:
+  - type: Sprite
+    sprite: _Arcadis/bitrunning.rsi
+    snapCardinals: true
+    layers:
+    - state: netpod
+      map: [machineLayer]
+  - type: GenericVisualizer
+    visuals:
+      enum.NetpodVisuals.Status:
+        machineLayer:
+          Opening: {state: "netpod_opening"}
+          Open: {state: "netpod"}
+          OpenPowered: {state: "netpod_open_active"}
+          Closing: {state: "netpod_closing"}
+          Closed: {state: "netpod_closed"}
+          ClosedPowered: {state: "netpod_closed_active"}
+  - type: Physics
+    bodyType: Static
+  - type: Construction
+    graph: Machine
+    node: machine
+    containers:
+    - machine_parts
+    - machine_board
+  - type: ContainerContainer
+    containers:
+      netpod_bodyContainer: !type:ContainerSlot
+      machine_board: !type:Container
+      machine_parts: !type:Container
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: StrongMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:ChangeConstructionNodeBehavior
+        node: machineFrame
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Machine
+    board: MedicalScannerMachineCircuitboard
+  - type: WiresPanel
+  - type: Appearance
+  - type: ApcPowerReceiver
+    powerLoad: 200 #Receives most of its power from the console
+  - type: EmptyOnMachineDeconstruct
+    containers:
+    - netpod_bodyContainer
+  - type: Netpod
+  - type: DragInsertContainer
+    containerId: netpod_bodyContainer
