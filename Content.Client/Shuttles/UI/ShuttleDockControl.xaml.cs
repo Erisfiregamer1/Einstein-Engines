@@ -98,6 +98,7 @@ public sealed partial class ShuttleDockControl : BaseShuttleControl
         if (_coordinates == null ||
             _angle == null ||
             DockState == null ||
+            GridEntity == null ||
             !EntManager.TryGetComponent<TransformComponent>(GridEntity, out var gridXform))
         {
             DrawNoSignal(handle);
@@ -107,7 +108,7 @@ public sealed partial class ShuttleDockControl : BaseShuttleControl
         DrawCircles(handle);
         var gridNent = EntManager.GetNetEntity(GridEntity);
         var mapPos = _xformSystem.ToMapCoordinates(_coordinates.Value);
-        var ourGridMatrix = _xformSystem.GetWorldMatrix(gridXform.Owner);
+        var ourGridMatrix = _xformSystem.GetWorldMatrix(GridEntity.Value); // remind me why this was using comp.owner!?! we have the grident right there ffs
         var dockMatrix = Matrix3Helpers.CreateTransform(_coordinates.Value.Position, Angle.Zero);
         var worldFromDock = Matrix3x2.Multiply(dockMatrix, ourGridMatrix);
 

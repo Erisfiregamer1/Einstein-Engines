@@ -35,14 +35,14 @@ public sealed class ExplosionOverlay : Overlay
 
         var xforms = _entMan.GetEntityQuery<TransformComponent>();
         var query = _entMan
-            .EntityQuery<ExplosionVisualsComponent, ExplosionVisualsTexturesComponent, AppearanceComponent>(true);
+            .EntityQueryEnumerator<ExplosionVisualsComponent, ExplosionVisualsTexturesComponent, AppearanceComponent>();
 
-        foreach (var (visuals, textures, appearance) in query)
+        while (query.MoveNext(out var uid, out var visuals, out var textures, out var appearance))
         {
             if (visuals.Epicenter.MapId != args.MapId)
                 continue;
 
-            if (!appearanceSystem.TryGetData(appearance.Owner, ExplosionAppearanceData.Progress, out int index))
+            if (!appearanceSystem.TryGetData(uid, ExplosionAppearanceData.Progress, out int index))
                 continue;
 
             index = Math.Min(index, visuals.Intensity.Count - 1);
