@@ -203,10 +203,9 @@ public sealed partial class ChangelingSystem : SharedChangelingSystem
         if (!_timing.IsFirstTimePredicted)
             return;
 
-        foreach (var comp in EntityManager.EntityQuery<ChangelingComponent>())
+        var entityenumerator = EntityManager.EntityQueryEnumerator<ChangelingComponent>();
+        while (entityenumerator.MoveNext(out var uid, out var comp))
         {
-            var uid = comp.Owner;
-
             if (_timing.CurTime < comp.UpdateTimer)
                 continue;
 

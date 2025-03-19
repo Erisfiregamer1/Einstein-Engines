@@ -57,9 +57,9 @@ public sealed partial class ChangelingInfectionSystem : EntitySystem
         if (!_timing.IsFirstTimePredicted)
             return;
 
-        foreach (var comp in EntityManager.EntityQuery<ChangelingInfectionComponent>())
+        var entityenumerator = EntityManager.EntityQueryEnumerator<ChangelingInfectionComponent>();
+        while (entityenumerator.MoveNext(out var uid, out var comp))
         {
-            var uid = comp.Owner;
 
             if (!EntityManager.TryGetComponent(uid, out AbsorbableComponent? _))
             {
