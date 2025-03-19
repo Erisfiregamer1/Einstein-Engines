@@ -73,7 +73,7 @@ public sealed class StealConditionSystem : EntitySystem
     {
         var group = _proto.Index(condition.Comp.StealGroup);
 
-        var title =condition.Comp.OwnerText == null
+        var title = condition.Comp.OwnerText == null
             ? Loc.GetString(condition.Comp.ObjectiveNoOwnerText, ("itemName", group.Name))
             : Loc.GetString(condition.Comp.ObjectiveText, ("owner", Loc.GetString(condition.Comp.OwnerText)), ("itemName", group.Name));
 
